@@ -1,4 +1,5 @@
 const express = require ("express");
+const methodOverride = require('method-override')
 const routerUser = require("./src/routers/routerUser");
 const routerCharacter = require ("./src/routers/routerCharacter");
 const routerMovie = require ("./src/routers/routerMovie")
@@ -6,6 +7,8 @@ const routerMovie = require ("./src/routers/routerMovie")
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 
 
 

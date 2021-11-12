@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
     "mysql2": "^2.3.3-rc.0",
     "sequelize": "^6.9.0",
     "sequelize-cli": "^6.3.0"
