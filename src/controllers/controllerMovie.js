@@ -1,6 +1,7 @@
 
 
 let db = require("../database/models")
+const { Op } = require("sequelize")
 
 const controller = {
 
@@ -76,7 +77,15 @@ delete:(req, res)=>{
 },
 
 list:(req, res) =>{
+  let buscador = req.query
+  console.log(buscador)
+  let title = buscador.name
+  let idGenero = buscador.genre
+  let orden = buscador.order
 
+  console.log(title,idGenero,orden)
+
+  if (title == undefined && idGenero == undefined && orden == undefined){
    db.Movie.findAll()
       .then((movieApi)=>{
           let movies = movieApi.map( mov => {
@@ -88,6 +97,41 @@ list:(req, res) =>{
           })
           return res.json( movies)
       })
+    }
+   else if ( orden != undefined){
+    console.log("entre al else if" )
+    db.Movie.findAll({
+      order: [["create_date" , orden]]
+    })
+      .then((movieApi) => {
+        let movies = movieApi.map(mov => {
+          return {
+            title: mov.title,
+            image: mov.image,
+            create_date: mov.create_date
+          }
+        })
+        return res.json(movies)
+      })
+
+   }
+   else{
+     console.log("entre al else")
+    db.Movie.findAll({
+      include: [{ association: "Genre" }],
+      where: {
+        [Op.or]: [
+          { title: { [Op.eq]: title } },
+          { genre_id: { [Op.eq]:idGenero } }
+
+        ]
+      }
+    })
+      .then((movies) => {
+        return res.json(movies)
+      })
+
+   }
 },
 
   detail: (req, res) => {

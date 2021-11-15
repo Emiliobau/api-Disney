@@ -1,5 +1,8 @@
 
 let db = require("../database/models")
+const {Op} = require("sequelize")
+
+
 
 const controller ={
   create:(req, res)=>{
@@ -74,6 +77,15 @@ const controller ={
 
 list:(req, res) =>{
 
+  let buscador  = req.query
+  console.log(buscador)
+  let name = buscador.name
+  let age = buscador.age
+  let idMovies= buscador.movies
+  console.log(name,age,idMovies)
+
+
+  if( name == undefined && age == undefined && idMovies == undefined ){
    db.Character.findAll()
       .then((charactersApi)=>{
           let characters = charactersApi.map( charact => {
@@ -84,6 +96,25 @@ list:(req, res) =>{
           })
           return res.json( characters)
       })
+    }
+    else{
+    db.Character.findAll({
+      include: [{ association: "Movie" }],
+           where: {
+             [Op.or]:[
+               {name : {[Op.eq]:name }},
+               {age : {[Op.eq]:age}},
+               { id: { [Op.eq]:idMovies}}
+               
+             ]
+           }
+         })
+          .then((character)=>{
+            return res.json(character)
+          })
+
+
+    }
 },
 
   detail: (req, res) => {
