@@ -78,12 +78,10 @@ delete:(req, res)=>{
 
 list:(req, res) =>{
   let buscador = req.query
-  console.log(buscador)
   let title = buscador.name
   let idGenero = buscador.genre
   let orden = buscador.order
 
-  console.log(title,idGenero,orden)
 
   if (title == undefined && idGenero == undefined && orden == undefined){
    db.Movie.findAll()
