@@ -3,6 +3,8 @@ const methodOverride = require('method-override')
 const routerUser = require("./src/routers/routerUser");
 const routerCharacter = require ("./src/routers/routerCharacter");
 const routerMovie = require ("./src/routers/routerMovie")
+const dotenv = require ("dotenv")
+dotenv.config()
 
 const app = express()
 
@@ -20,5 +22,5 @@ app.use("/movie", routerMovie);
 
 
 app.listen(process.env.PORT || 3000, ()=>{
-  console.log("Servidor funcionando en puerto 3000")
+  console.log("Servidor funcionando en puerto", process.env.PORT  )
 })

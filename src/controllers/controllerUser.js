@@ -2,6 +2,7 @@
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 let db = require("../database/models")
+const main = require("../utils/sendMail")
 
 const controller = {
 
@@ -26,7 +27,9 @@ const controller = {
                 create: "ok"
               })
             })
+             main(email)
               }
+
                })
 
     },
@@ -44,7 +47,7 @@ const controller = {
           passwordOk = bcrypt.compareSync(password, user.password)
         }
         if (passwordOk) {
-          token = jwt.sign({ id: user.id, email: user.email }, "alkemy", { expiresIn:"1d"} )
+          token = jwt.sign({ id: user.id, email: user.email }, process.env.AUTH_SECRET, { expiresIn: process.env.AUTH_EXPIRE} )
                return res.json({ message: "contraseña correcta", token})}
         else {
           return res.json({ message: "credenciales inavalidas" })}
